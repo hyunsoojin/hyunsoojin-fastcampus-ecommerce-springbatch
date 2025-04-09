@@ -1,0 +1,7 @@
+sellerId,category,productName,salesStartDate,salesEndDate,productStatus,brand,manufacturer,salesPrice,stockQuantity
+76,화장품,스마트폰,2022-01-08,2026-08-14,DISCONTINUED,롯데,LG전자,81522,470
+63,서적,소설,2022-10-24,2025-06-19,OUT_OF_STOCK,현대,스타벅스코리아,72537,1034
+54,서적,소설,2020-10-10,2026-11-08,AVAILABLE,현대,아모레퍼시픽,259862,2401
+97,디지털,셔츠,2021-02-07,2026-10-03,OUT_OF_STOCK,스타벅스,BMW코리아,389618,3259
+53,스포츠,레고,2020-03-01,2026-12-18,OUT_OF_STOCK,롯데,현대자동차,445405,3913
+4,완구,레고,2022-06-09,2025-04-27,AVAILABLE,도미노,LG전자,397382,1517
