@@ -2,7 +2,7 @@ spring:
   application:
     name: ecommerce-batch
   datasource:
-    url: jdbc:postresql://localhost:5433/postgres?profileSQL=true
+    url: jdbc:postgresql://localhost:5433/postgres?profileSQL=true
     username: postgres
     password: localpw
     hikari:

@@ -13,4 +13,4 @@ create table products
     stock_quantity   integer   default 0,
     created_at       timestamp default current_timestamp,
     updated_at       timestamp default current_timestamp
-)
+);
