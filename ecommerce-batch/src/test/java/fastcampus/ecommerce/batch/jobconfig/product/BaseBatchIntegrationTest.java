@@ -1,4 +1,4 @@
-package fastcampus.ecommerce.batch.jobconfig.product.upload;
+package fastcampus.ecommerce.batch.jobconfig.product;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

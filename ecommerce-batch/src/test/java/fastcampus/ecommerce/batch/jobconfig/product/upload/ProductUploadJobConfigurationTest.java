@@ -3,6 +3,7 @@ package fastcampus.ecommerce.batch.jobconfig.product.upload;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+import fastcampus.ecommerce.batch.jobconfig.product.BaseBatchIntegrationTest;
 import fastcampus.ecommerce.batch.service.product.ProductService;
 import java.io.IOException;
 import org.junit.jupiter.api.Test;
@@ -40,6 +41,7 @@ class ProductUploadJobConfigurationTest extends BaseBatchIntegrationTest {
     return new JobParametersBuilder()
         .addJobParameter("inputFilePath",
             new JobParameter<>(input.getFile().getPath(), String.class, false))
+        .addJobParameter("gridSize", new JobParameter<>(3, Integer.class, false))
         .toJobParameters();
   }
 

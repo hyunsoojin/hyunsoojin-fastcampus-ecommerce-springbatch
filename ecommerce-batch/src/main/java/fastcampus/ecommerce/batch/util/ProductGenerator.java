@@ -1,7 +1,7 @@
 package fastcampus.ecommerce.batch.util;
 
 import fastcampus.ecommerce.batch.domain.product.ProductStatus;
-import fastcampus.ecommerce.batch.dto.ProductUploadCsvRow;
+import fastcampus.ecommerce.batch.dto.product.upload.ProductUploadCsvRow;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;

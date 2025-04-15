@@ -1,6 +1,6 @@
 package fastcampus.ecommerce.batch.domain.product;
 
-import fastcampus.ecommerce.batch.dto.ProductUploadCsvRow;
+import fastcampus.ecommerce.batch.dto.product.upload.ProductUploadCsvRow;
 import fastcampus.ecommerce.batch.util.DateTimeUtils;
 import fastcampus.ecommerce.batch.util.RandomUtils;
 import java.time.LocalDate;

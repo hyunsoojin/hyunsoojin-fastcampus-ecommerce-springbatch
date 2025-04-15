@@ -1,4 +1,4 @@
-package fastcampus.ecommerce.batch.dto;
+package fastcampus.ecommerce.batch.dto.product.upload;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
