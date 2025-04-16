@@ -28,7 +28,7 @@ public class BatchStepExecutionListener implements StepExecutionListener, ChunkL
   @Override
   public void afterChunk(ChunkContext context) {
     manager.pushMetrics(
-        Map.of("job name", context.getStepContext().getStepExecution().getJobExecution()
+        Map.of("job_name", context.getStepContext().getStepExecution().getJobExecution()
             .getJobInstance().getJobName()));
     ChunkListener.super.afterChunk(context);
   }

@@ -6,8 +6,8 @@ import fastcampus.ecommerce.batch.dto.product.upload.ProductUploadCsvRow;
 import fastcampus.ecommerce.batch.service.file.SplitFilePartitioner;
 import fastcampus.ecommerce.batch.util.FileUtils;
 import fastcampus.ecommerce.batch.util.ReflectionUtils;
-import jakarta.persistence.EntityManagerFactory;
 import java.io.File;
+import javax.sql.DataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
@@ -22,12 +22,14 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.database.JpaItemWriter;
-import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
+import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.database.JdbcBatchItemWriter;
+import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.support.SynchronizedItemStreamReader;
 import org.springframework.batch.item.support.builder.SynchronizedItemStreamReaderBuilder;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,6 +43,7 @@ public class ProductUploadJobConfiguration {
 
   @Bean
   public Job productUploadJob(JobRepository jobRepository, JobExecutionListener listener,
+      @Qualifier("productUploadPartitionStep")
       Step productUploadPartitionStep) {
     return new JobBuilder("productUploadJob", jobRepository)
         .listener(listener)
@@ -51,6 +54,7 @@ public class ProductUploadJobConfiguration {
 
   @Bean
   public Step productUploadPartitionStep(PartitionHandler filePartitionHandler,
+      @Qualifier("productUploadStep")
       Step productUploadStep,
       JobRepository jobRepository, SplitFilePartitioner splitFilePartitioner) {
     return new StepBuilder("productUploadPartitionStep", jobRepository)
@@ -72,6 +76,7 @@ public class ProductUploadJobConfiguration {
   @Bean
   @JobScope
   public TaskExecutorPartitionHandler filePartitionHandler(TaskExecutor taskExecutor,
+      @Qualifier("productUploadStep")
       Step productUploadStep, @Value("#{jobParameters['gridSize']}") int gridSize) {
     TaskExecutorPartitionHandler handler = new TaskExecutorPartitionHandler();
     handler.setTaskExecutor(taskExecutor);
@@ -86,7 +91,7 @@ public class ProductUploadJobConfiguration {
       StepExecutionListener stepExecutionListener,
       ItemReader<ProductUploadCsvRow> productReader,
       ItemProcessor<ProductUploadCsvRow, Product> productProcessor,
-      JpaItemWriter<Product> productWriter,
+      ItemWriter<Product> productWriter,
       TaskExecutor taskExecutor) {
     return new StepBuilder("productUploadStep", jobRepository)
         .<ProductUploadCsvRow, Product>chunk(1000, transactionManager)
@@ -120,11 +125,15 @@ public class ProductUploadJobConfiguration {
   }
 
   @Bean
-  public JpaItemWriter<Product> productWriter(EntityManagerFactory entityManagerFactory) {
-    return new JpaItemWriterBuilder<Product>()
-        .entityManagerFactory(entityManagerFactory)
-        .usePersist(true)
+  public JdbcBatchItemWriter<Product> productWriter(DataSource dataSource) {
+    String sql = "INSERT INTO PRODUCTS(product_id, seller_id, category, product_name, "
+        + "sales_start_date, sales_end_date, product_status, brand, manufacturer, sales_price, "
+        + "stock_quantity, created_at, updated_at) VALUES(:productId, :sellerId, :category, :productName, :salesStartDate, :salesEndDate, "
+        + ":productStatus, :brand, :manufacturer, :salesPrice, :stockQuantity, :createdAt, :updatedAt)";
+    return new JdbcBatchItemWriterBuilder<Product>()
+        .dataSource(dataSource)
+        .sql(sql)
+        .beanMapped()
         .build();
   }
-
 }
