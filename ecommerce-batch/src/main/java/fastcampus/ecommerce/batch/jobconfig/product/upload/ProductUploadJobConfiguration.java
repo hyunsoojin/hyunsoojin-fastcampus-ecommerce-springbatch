@@ -53,7 +53,9 @@ public class ProductUploadJobConfiguration {
 
 
   @Bean
-  public Step productUploadPartitionStep(PartitionHandler filePartitionHandler,
+  public Step productUploadPartitionStep(
+      @Qualifier("filePartitionHandler")
+      PartitionHandler filePartitionHandler,
       @Qualifier("productUploadStep")
       Step productUploadStep,
       JobRepository jobRepository, SplitFilePartitioner splitFilePartitioner) {
@@ -73,7 +75,7 @@ public class ProductUploadJobConfiguration {
     return new SplitFilePartitioner(FileUtils.splitCsv(new File(path), gridSize));
   }
 
-  @Bean
+  @Bean(name = "filePartitionHandler")
   @JobScope
   public TaskExecutorPartitionHandler filePartitionHandler(TaskExecutor taskExecutor,
       @Qualifier("productUploadStep")
