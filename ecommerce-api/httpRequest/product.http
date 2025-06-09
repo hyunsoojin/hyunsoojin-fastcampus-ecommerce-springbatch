@@ -1,0 +1,9 @@
+### 상품 단건 조회
+GET http://localhost:8080/v1/products/1744805698475_fc280a6e-69c4-4e4f-9e8d-733e66409d83
+Content-Type: application/json
+
+### 상품 페이징 조회
+GET http://localhost:8080/v1/products?page=0&size=10&sort=productId,asc
+Content-Type: application/json
+
+### 주문 생성

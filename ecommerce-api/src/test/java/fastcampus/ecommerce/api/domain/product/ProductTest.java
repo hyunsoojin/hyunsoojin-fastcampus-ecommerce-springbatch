@@ -1,11 +1,14 @@
 package fastcampus.ecommerce.api.domain.product;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class ProductTest {
 
@@ -27,7 +30,33 @@ class ProductTest {
 
   @Test
   void testIncreaseSTockNegativeResult() {
+    assertThatThrownBy(() -> product.increaseStock(Integer.MAX_VALUE))
+        .isInstanceOf(StockQuantityArithmeticException.class);
+  }
 
-    product.increaseStock(Integer.MAX_VALUE);
+  @ParameterizedTest
+  @ValueSource(ints = {-10, -1, 0})
+  void testIncreaseStockPositiveParameter(int notPositiveQuantity) {
+    assertThatThrownBy(() -> product.increaseStock(notPositiveQuantity))
+        .isInstanceOf(InvalidStockQuantityException.class);
+  }
+
+  @Test
+  void testDecreaseStock() {
+    product.decreaseStock(50);
+    assertThat(product.getStockQuantity()).isEqualTo(50);
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = {-10, -1, 0})
+  void testDecreaseStockPositiveParameter(int notPositiveQuantity) {
+    assertThatThrownBy(() -> product.decreaseStock(notPositiveQuantity))
+        .isInstanceOf(InvalidStockQuantityException.class);
+  }
+
+  @Test
+  void testDecreaseStockInsufficientStock() {
+    assertThatThrownBy(() -> product.decreaseStock(101))
+        .isInstanceOf(InsufficientStockException.class);
   }
 }

@@ -46,6 +46,24 @@ public class Product {
 
 
   public void increaseStock(int stockQuantity) {
+    validStockQuantity(stockQuantity);
+    if (this.stockQuantity + stockQuantity < 0) {
+      throw new StockQuantityArithmeticException();
+    }
     this.stockQuantity += stockQuantity;
+  }
+
+  public void decreaseStock(int stockQuantity) {
+    validStockQuantity(stockQuantity);
+    if (this.stockQuantity < stockQuantity) {
+      throw new InsufficientStockException();
+    }
+    this.stockQuantity -= stockQuantity;
+  }
+
+  private static void validStockQuantity(int stockQuantity) {
+    if (stockQuantity <= 0) {
+      throw new InvalidStockQuantityException();
+    }
   }
 }
