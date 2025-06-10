@@ -116,7 +116,7 @@ public class Order {
     ;
   }
 
-  public void complete() {
+  public void completeOrder() {
     if (orderStatus != OrderStatus.PROCESSING) {
       throw new IllegalOrderStateException("처리 중인 주문만 완료할 수 있습니다.");
     }

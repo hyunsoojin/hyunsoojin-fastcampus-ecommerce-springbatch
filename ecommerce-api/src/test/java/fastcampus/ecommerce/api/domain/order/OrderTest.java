@@ -21,7 +21,7 @@ class OrderTest {
   }
 
   @Test
-  void testCompletePayment() {
+  void testCompleteOrderPayment() {
     order.completePayment(true);
     assertAll(
         () -> assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.PROCESSING),
@@ -32,7 +32,7 @@ class OrderTest {
   }
 
   @Test
-  void testCompletePaymentFail() {
+  void testCompleteOrderPaymentFail() {
     order.completePayment(false);
     assertAll(
         () -> assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.PROCESSING),
@@ -42,30 +42,30 @@ class OrderTest {
   }
 
   @Test
-  void testCompletePaymentException() {
+  void testCompleteOrderPaymentException() {
     order.completePayment(false);
     assertThatThrownBy(() -> order.completePayment(true))
         .isInstanceOf(IllegalOrderStateException.class);
   }
 
   @Test
-  void testComplete() {
+  void testCompleteOrder() {
     order.completePayment(true);
-    order.complete();
+    order.completeOrder();
     assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.COMPLETED);
   }
 
   @Test
-  void testCompleteOrderPaymentFail() {
+  void testCompleteOrderOrderPaymentFail() {
     order.completePayment(false);
 
-    assertThatThrownBy(() -> order.complete())
+    assertThatThrownBy(() -> order.completeOrder())
         .isInstanceOf(IllegalOrderStateException.class);
   }
 
   @Test
-  void testCompleteOrderException() {
-    assertThatThrownBy(() -> order.complete())
+  void testCompleteOrderOrderException() {
+    assertThatThrownBy(() -> order.completeOrder())
         .isInstanceOf(IllegalOrderStateException.class);
   }
 
@@ -80,9 +80,9 @@ class OrderTest {
   }
 
   @Test
-  void testOrderCancelAfterComplete() {
+  void testOrderCancelAfterCompleteOrder() {
     order.completePayment(true);
-    order.complete();
+    order.completeOrder();
     assertThatThrownBy(() -> order.cancel())
         .isInstanceOf(IllegalOrderStateException.class);
   }
