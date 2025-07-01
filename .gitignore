@@ -38,3 +38,6 @@ out/
 
 ## postgresql data ##
 /tools/data
+
+## batch file ##
+*.csv\
