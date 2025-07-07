@@ -17,6 +17,11 @@ public class OrderRequest {
   private List<OrderItemRequest> orderItems;
   private PaymentMethod paymentMethod;
 
+  public static OrderRequest of(Long customerId, List<OrderItemRequest> orderItems,
+      PaymentMethod paymentMethod) {
+    return new OrderRequest(customerId, orderItems, paymentMethod);
+  }
+
   public List<OrderItemCommand> getOrderItemsCommand() {
     return orderItems.stream()
         .map(item -> OrderItemCommand.of(item.getQuantity(), item.getProductId()))
